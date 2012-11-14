@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <form wicket:id="form">
+      <div wicket:id="feedback"></div>
+      <table>
+        <tr>
+          <td>Word:</td>
+          <td>
+            <input wicket:id="code" type="text">
+          </td>
+        </tr>
+        <tr>
+          <td>Type:</td>
+          <td>
+            <select>
+              <option selected="selected">Noun</option>
+            </select>
+          </td>
+        </tr>
+      </table>
+      <button wicket:id="back" type="submit">Back</button>
+      <button wicket:id="save" type="submit">Save</button>
+      <button wicket:id="delete" type="submit">Delete</button>
+    </form>
+  </body>
+</html>

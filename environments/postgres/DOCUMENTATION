@@ -1,0 +1,73 @@
+This piece describes setting up the database. A debian like linux
+operating system is expected.
+
+Database name: tp
+
+user@42-desktop:~$ su
+root@42-desktop:/home/user# apt-get install postgresql
+root@42-desktop:/home/user# su postgres
+postgres@42-desktop:/home/user$ createdb tp
+postgres@42-desktop:/home/user$ psql tp < workspace/testproject/environments/postgres/init.sql
+CREATE ROLE
+ALTER DATABASE
+NOTICE:  CREATE TABLE will create implicit sequence "words_id_seq" for serial column "words.id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "pk_words" for table "words"
+NOTICE:  CREATE TABLE / UNIQUE will create implicit index "uk_words_code" for table "words"
+CREATE TABLE
+GRANT
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+postgres@42-desktop:/home/user$ psql tp
+psql (9.1.6)
+Type "help" for help.
+
+tp=# \dt
+         List of relations
+ Schema | Name  | Type  |  Owner   
+--------+-------+-------+----------
+ public | words | table | postgres
+(1 row)
+
+tp=# select * from words;
+ id | word_type |  code  
+----+-----------+--------
+  1 | N         | boek
+  2 | N         | lengte
+  3 | V         | lezen
+  4 | V         | meten
+  5 | A         | lang
+  6 | A         | mooi
+  7 | A         | goed
+  8 | P         | in
+  9 | P         | met
+(9 rows)
+
+tp=# \q
+postgres@42-desktop:/home/user$ exit
+exit
+root@42-desktop:/home/user# exit
+exit
+user@42-desktop:~$ 
+
+
+
+Appendix
+
+About setting up JNDI for various environments.
+
+1) Postgres.
+   hibernate_dialect: org.hibernate.dialect.PostgreSQLDialect
+         driverClass: org.postgresql.Driver
+             jdbcUrl: jdbc:postgresql://localhost/tp
+
+2) HSQLDB.
+   hibernate_dialect: org.hibernate.dialect.HSQLDialect
+         driverClass: org.hsqldb.jdbcDriver
+             jdbcUrl: jdbc:hsqldb:mem:tp

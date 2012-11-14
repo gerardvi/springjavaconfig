@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configure id="wapp" class="org.eclipse.jetty.webapp.WebAppContext">
+  <New id="tpDataSource" class="org.eclipse.jetty.plus.jndi.Resource">
+    <Arg></Arg> <!-- Scope argument -->
+    <Arg>jdbc/tpDataSource</Arg>
+    <Arg>
+      <New class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <Set name="driverClass">org.postgresql.Driver</Set>
+        <Set name="jdbcUrl">jdbc:postgresql://localhost/tp</Set>
+        <Set name="user">tpowner</Set>
+        <Set name="password">tpowner</Set>
+        <Set name="minPoolSize">2</Set>
+        <Set name="maxPoolSize">20</Set>
+        <Set name="maxIdleTime">3600</Set>
+        <Set name="idleConnectionTestPeriod">300</Set>
+        <Set name="automaticTestTable">jdbc_pool_check</Set>
+        <Set name="checkoutTimeout">20000</Set>
+      </New>
+    </Arg>
+  </New>
+
+  <New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <Arg><Ref id="wapp"/></Arg> <!-- Scope argument -->
+    <Arg>hibernate_dialect</Arg>
+    <Arg type="java.lang.String">org.hibernate.dialect.PostgreSQLDialect</Arg>
+    <Arg type="boolean">true</Arg> <!-- Override possible web.xml specified value? -->
+  </New>
+
+  <New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <Arg><Ref id="wapp"/></Arg> <!-- Scope argument -->
+    <Arg>hibernate_format_sql</Arg>
+    <Arg type="java.lang.String">false</Arg>
+    <Arg type="boolean">true</Arg> <!-- Override possible web.xml specified value? -->
+  </New>
+
+  <New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <Arg><Ref id="wapp"/></Arg> <!-- Scope argument -->
+    <Arg>hibernate_show_sql</Arg>
+    <Arg type="java.lang.Boolean">true</Arg>
+    <Arg type="boolean">true</Arg> <!-- Override possible web.xml specified value? -->
+  </New>
+
+  <New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <Arg><Ref id="wapp"/></Arg> <!-- Scope argument -->
+    <Arg>hibernate_use_sql_comments</Arg>
+    <Arg type="java.lang.String">true</Arg>
+    <Arg type="boolean">true</Arg> <!-- Override possible web.xml specified value? -->
+  </New>
+</Configure>
