@@ -14,10 +14,18 @@
     <res-sharing-scope>Unshareable</res-sharing-scope>
   </resource-ref>
 
-  <!-- Spring bean definitions -->
+  <!-- Spring configuration -->
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>classpath:appcontext.xml</param-value>
+    <param-value>config.Appcontext</param-value>
+  </context-param>
+  <context-param>
+    <param-name>contextClass</param-name>
+    <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
+  </context-param>
+  <context-param>
+    <param-name>spring.profiles.active</param-name>
+    <param-value>production</param-value>
   </context-param>
 
   <!-- Spring context listeners -->

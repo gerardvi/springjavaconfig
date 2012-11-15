@@ -71,3 +71,180 @@ About setting up JNDI for various environments.
    hibernate_dialect: org.hibernate.dialect.HSQLDialect
          driverClass: org.hsqldb.jdbcDriver
              jdbcUrl: jdbc:hsqldb:mem:tp
+
+
+
+The directory src/main/resources used to contain the file appcontext.xml:
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context-3.0.xsd
+                           http://www.springframework.org/schema/tx
+                           http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+                           http://www.springframework.org/schema/jdbc
+                           http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+                           http://www.springframework.org/schema/jee
+                           http://www.springframework.org/schema/jee/spring-jee.xsd">
+
+  <context:annotation-config/>
+  <context:component-scan base-package="dao"/>
+  <context:component-scan base-package="services"/>
+
+  <!-- Setup wicket application:
+       Needed if property `applicationFactoryClassName' of `WicketFilter'
+       has value `org.apache.wicket.spring.SpringWebApplicationFactory'.
+       (cf. src/main/webapp/WEB-INF/web.xml)  -->
+  <bean id="wicketApplication" class="web.WicketApplication">
+  </bean>
+
+
+  <!-- DATABASE / JPA / HIBERNATE -->
+
+  <tx:annotation-driven transaction-manager="transactionManager"/>
+
+  <jee:jndi-lookup id="dataSource" jndi-name="jdbc/tpDataSource"/> <!-- cf. environments/postgres/jetty-env.xml -->
+  <jee:jndi-lookup id="hibernate_dialect" jndi-name="hibernate_dialect"/>
+  <jee:jndi-lookup id="hibernate_format_sql" jndi-name="hibernate_format_sql"/>
+  <jee:jndi-lookup id="hibernate_show_sql" jndi-name="hibernate_show_sql"/>
+  <jee:jndi-lookup id="hibernate_use_sql_comments" jndi-name="hibernate_use_sql_comments"/>
+
+  <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+    <property name="dataSource" ref="dataSource"/>
+    <property name="jpaPropertyMap">
+      <map>
+        <entry key="hibernate.dialect" value-ref="hibernate_dialect"/>
+        <entry key="hibernate.dialect" value="${onzin}"/> <!-- This value overwrites the previous one, and yet our application doesn't crash and is able to do db-transactions: so is setting this property necessary? -->
+        <entry key="hibernate.hbm2ddl.auto" value="validate"/>
+        <entry key="hibernate.format_sql" value-ref="hibernate_format_sql"/>
+        <entry key="hibernate.use_sql_comments" value-ref="hibernate_use_sql_comments"/>
+      </map>
+    </property>
+    <property name="jpaVendorAdapter">
+      <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+        <property name="showSql" ref="hibernate_show_sql"/>
+      </bean>
+    </property>
+    <!--property name="persistenceUnitName" value="hibernatePersistence"/-->
+  </bean>
+
+  <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+    <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    <property name="dataSource" ref="dataSource"/>
+  </bean>
+</beans>
+
+This file has been replaced by: src/main/java/config/Appcontext.java
+The diff of src/main/webapp/WEB-INF/web.xml is:
+Index: src/main/webapp/WEB-INF/web.xml
+===================================================================
+--- src/main/webapp/WEB-INF/web.xml (revision 37476)
++++ src/main/webapp/WEB-INF/web.xml (working copy)
+@@ -17,8 +17,16 @@
+   <!-- Spring bean definitions -->
+   <context-param>
+     <param-name>contextConfigLocation</param-name>
+-    <param-value>classpath:appcontext.xml</param-value>
++    <param-value>config.Appcontext</param-value>
+   </context-param>
++  <context-param>
++    <param-name>contextClass</param-name>
++    <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
++  </context-param>
++  <!--context-param>
++    <param-name>spring.profiles.active</param-name>
++    <param-value>production</param-value>
++  </context-param-->
+ 
+   <!-- Spring context listeners -->
+   <listener>
+
+No new dependencies are needed.
+
+
+For TESTS: there used to be a file src/test/resources/testcontext.xml:
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context-3.0.xsd
+                           http://www.springframework.org/schema/tx
+                           http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+                           http://www.springframework.org/schema/jdbc
+                           http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd">
+
+  <context:annotation-config/>
+  <context:component-scan base-package="dao"/>
+  <context:component-scan base-package="services"/>
+
+
+  <!-- DATABASE / JPA / HIBERNATE -->
+
+  <tx:annotation-driven transaction-manager="transactionManager"/>
+
+  <jdbc:embedded-database id="dataSource">
+    <jdbc:script location="file:environments/hsqldb/init.sql"/> <!-- initialise database. -->
+  </jdbc:embedded-database>
+
+  <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+    <property name="dataSource" ref="dataSource"/>
+    <property name="jpaProperties">
+      <props>
+        <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
+        <prop key="hibernate.hbm2ddl.auto">validate</prop>
+        <prop key="hibernate.format_sql">false</prop>
+        <prop key="hibernate.use_sql_comments">true</prop>
+      </props>
+    </property>
+    <property name="jpaVendorAdapter">
+      <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+        <property name="showSql" value="true"/>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+    <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    <property name="dataSource" ref="dataSource"/>
+  </bean>
+</beans>
+
+Also this file has been replaced by: src/main/java/config/Appcontext.java
+The diff of src/test/java/dao/DaoComponentTest.java is:
+Index: src/test/java/dao/DaoComponentTest.java
+===================================================================
+--- src/test/java/dao/DaoComponentTest.java (revision 37506)
++++ src/test/java/dao/DaoComponentTest.java (working copy)
+@@ -11,6 +11,7 @@
+ import org.junit.Test;
+ import org.junit.runner.RunWith;
+ import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.test.context.ActiveProfiles;
+ import org.springframework.test.context.ContextConfiguration;
+ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+ 
+@@ -20,7 +21,8 @@
+ import domain.WordType;
+ 
+ @RunWith (SpringJUnit4ClassRunner.class)
+-@ContextConfiguration (locations = {"classpath:testcontext.xml"})
++@ContextConfiguration (classes = {config.Appcontext.class})
++@ActiveProfiles (profiles = {"test"})
+ public class DaoComponentTest {
+     @Autowired
+     private DaoComponent daoComponent;
+
+Again, no new dependencies are needed.

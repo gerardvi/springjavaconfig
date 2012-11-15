@@ -6,7 +6,7 @@
   <groupId>testproject</groupId>
   <artifactId>testproject</artifactId>
   <packaging>war</packaging>
-  <version>3-SNAPSHOT</version>
+  <version>4-SNAPSHOT</version>
   <name>testproject</name>
   <description>A test project to figure out how all configuration works.</description>
 
@@ -17,7 +17,7 @@
     <hsqldb.version>1.8.0.7</hsqldb.version>
     <jetty.version>7.5.0.v20110901</jetty.version>
     <postgresql.version>9.0-801.jdbc4</postgresql.version>
-    <spring.version>3.0.4.RELEASE</spring.version>
+    <spring.version>3.1.0.RELEASE</spring.version>
     <wicket.version>1.5.8</wicket.version>
   </properties>
 

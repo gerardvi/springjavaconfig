@@ -11,6 +11,7 @@ import java.util.ListIterator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -20,7 +21,8 @@ import domain.Word;
 import domain.WordType;
 
 @RunWith (SpringJUnit4ClassRunner.class)
-@ContextConfiguration (locations = {"classpath:testcontext.xml"})
+@ContextConfiguration (classes = {config.Appcontext.class})
+@ActiveProfiles (profiles = {"test"})
 public class DaoComponentTest {
     @Autowired
     private DaoComponent daoComponent;
