@@ -1,7 +1,6 @@
 package web.page;
 
 import org.apache.wicket.injection.Injector;
-import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -11,7 +10,7 @@ import web.page.components.FormBase;
 import domain.Word;
 import domain.WordType;
 
-public class WordDetailsPage extends WebPage {
+public class WordDetailsPage extends PageBase {
     public WordDetailsPage (EntityModel wordModel) {
         add (new Form (wordModel));
     }

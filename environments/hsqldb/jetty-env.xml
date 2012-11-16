@@ -4,10 +4,8 @@
     <Arg>databaseConfigInfo</Arg>
     <Arg>
       <New class="commons.config.DatabaseConfigInfo">
-        <Set name="databaseId">POSTGRES</Set>
-        <Set name="jdbcUrl">jdbc:postgresql://localhost/tp</Set>
-        <Set name="user">tpowner</Set>
-        <Set name="password">tpowner</Set>
+        <Set name="databaseId">HSQL</Set>
+        <Set name="sqlInitFile">file:environments/hsqldb/init.sql</Set>
       </New>
     </Arg>
   </New>

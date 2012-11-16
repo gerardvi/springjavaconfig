@@ -11,7 +11,6 @@
   <description>A test project to figure out how all configuration works.</description>
 
   <properties>
-    <dbenvdir>environments/postgres</dbenvdir>
     <hibernate.version>3.5.5-Final</hibernate.version>
     <hibernate.java-persistence.version>2.0-cr-1</hibernate.java-persistence.version>
     <hsqldb.version>1.8.0.7</hsqldb.version>
@@ -20,6 +19,44 @@
     <spring.version>3.1.0.RELEASE</spring.version>
     <wicket.version>1.5.8</wicket.version>
   </properties>
+
+  <profiles>
+    <profile>
+      <id>default_activedb</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <dbenvdir>environments/hsqldb</dbenvdir>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>hsqldb_activedb</id>
+      <activation>
+        <property>
+          <name>activedb</name>
+          <value>hsqldb</value>
+        </property>
+      </activation>
+      <properties>
+        <dbenvdir>environments/hsqldb</dbenvdir>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>postgres_activedb</id>
+      <activation>
+        <property>
+          <name>activedb</name>
+          <value>postgres</value>
+        </property>
+      </activation>
+      <properties>
+        <dbenvdir>environments/postgres</dbenvdir>
+      </properties>
+    </profile>
+  </profiles>
 
   <dependencies>
     <!--  WICKET DEPENDENCIES -->

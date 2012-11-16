@@ -8,11 +8,26 @@
   <display-name>testproject</display-name>
 
   <resource-ref>
-    <res-ref-name>jdbc/tpDataSource</res-ref-name>
-    <res-type>javax.sql.DataSource</res-type>
-    <res-auth>Container</res-auth>
-    <res-sharing-scope>Unshareable</res-sharing-scope>
+    <res-ref-name>databaseConfigInfo</res-ref-name>
+    <res-type>commons.config.DatabaseConfigInfo</res-type>
   </resource-ref>
+
+  <!-- Jndi -->
+  <env-entry>
+    <env-entry-name>hibernate_format_sql</env-entry-name>
+    <env-entry-type>java.lang.String</env-entry-type>
+    <env-entry-value>false</env-entry-value>
+  </env-entry>
+  <env-entry>
+    <env-entry-name>hibernate_show_sql</env-entry-name>
+    <env-entry-type>java.lang.Boolean</env-entry-type>
+    <env-entry-value>true</env-entry-value>
+  </env-entry>
+  <env-entry>
+    <env-entry-name>hibernate_use_sql_comments</env-entry-name>
+    <env-entry-type>java.lang.String</env-entry-type>
+    <env-entry-value>true</env-entry-value>
+  </env-entry>
 
   <!-- Spring configuration -->
   <context-param>

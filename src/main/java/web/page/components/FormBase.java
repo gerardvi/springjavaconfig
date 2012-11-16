@@ -1,5 +1,6 @@
 package web.page.components;
 
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -14,6 +15,14 @@ public abstract class FormBase <T> extends Form <T> {
     protected FormBase (String wicketId) {
         this (wicketId, null);
     }
+
+//    protected DropDownChoice addDropdown (String wicketId, Class optionType) {
+//        if (! Enum.class.isAssignableFrom (optionType)) { /* Temporarily just for Enums. */
+//            throw new IllegalArgumentException ("Currently the only supported option type is java.lang.Enum.");
+//        }
+//        DropDownChoice addedComponent = new DropDownChoice ("");
+//return null;
+//    }
 
     protected FeedbackPanel addFeedback () {
         FeedbackPanel addedComponent = new FeedbackPanel ("feedback");

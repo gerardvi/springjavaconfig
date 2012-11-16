@@ -6,6 +6,26 @@ a {
 a:hover {
     text-decoration: underline;
 }
+a.back {
+    background-image: url('icons/Back.png');
+}
+a.create {
+    background-image: url('icons/Create.png');
+}
+a.icon {
+    display: block;
+    height: 16px;
+    width: 16px;
+}
+a.modify {
+    background-image: url('icons/Modify.png');
+}
+a.save {
+    background-image: url('icons/Save.png');
+}
+a.trash {
+    background-image: url('icons/Trash.png');
+}
 
 body {
     background-color: #F2F1F0;

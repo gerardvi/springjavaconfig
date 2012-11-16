@@ -1,26 +1,20 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <link rel="stylesheet" type="text/css" href="stylesheet.css">
-  </head>
-  <body>
-    <form wicket:id="form">
-      <table>
-        <tr>
-          <th>Word</th>
-          <th>Type</th>
-          <th>&nbsp;</th>
-        </tr>
+<wicket:extend>
+  <form wicket:id="form">
+    <table>
+      <tr>
+        <th>Word</th>
+        <th>Type</th>
+        <th>&nbsp;</th>
+      </tr>
 
-        <tr wicket:id="dataview">
-          <td wicket:id="code"></td>
-          <td wicket:id="type"></td>
-          <td>
-            <a wicket:id="details">details</a>
-          </td>
-        </tr>
-      </table>
-      <a wicket:id="details">new</a>
-    </form>
-  </body>
-</html>
+      <tr wicket:id="dataview">
+        <td wicket:id="code"></td>
+        <td wicket:id="type"></td>
+        <td>
+          <a wicket:id="details" class="icon modify" title="Modify"></a>
+        </td>
+      </tr>
+    </table>
+    <a wicket:id="details" class="icon create" title="Add a new word"></a>
+  </form>
+</wicket:extend>

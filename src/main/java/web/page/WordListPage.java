@@ -1,6 +1,5 @@
 package web.page;
 
-import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
@@ -15,7 +14,7 @@ import commons.Strings;
 
 import domain.Word;
 
-public class WordListPage extends WebPage {
+public class WordListPage extends PageBase {
     public WordListPage () {
         Form form = new Form ("form");
         EntityDataProvider dataProvider = new EntityDataProvider (Word.class);
