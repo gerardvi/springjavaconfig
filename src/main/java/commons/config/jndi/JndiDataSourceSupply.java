@@ -1,11 +1,9 @@
-package commons.web;
+package commons.config.jndi;
 
 import java.beans.PropertyVetoException;
 
 import javax.sql.DataSource;
 
-import org.hibernate.dialect.HSQLDialect;
-import org.hibernate.dialect.PostgreSQLDialect;
 import org.postgresql.Driver;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 
@@ -52,21 +50,19 @@ import commons.config.DatabaseId;
  */
 public final class JndiDataSourceSupply {
     private final DataSource dataSource;
-    private final String hibernateDialect;
+    private final DatabaseId databaseId;
 
     public JndiDataSourceSupply () {
         DatabaseConfigInfo configInfo = (DatabaseConfigInfo) Jndi.lookupNotNull ("databaseConfigInfo");
-        DatabaseId dbid = getDatabaseId (configInfo.getDatabaseId ());
-        switch (dbid) {
+        databaseId = DatabaseId.forName (configInfo.getDatabaseId ());
+        switch (databaseId) {
         case HSQL: {
             String sqlInitFile = validateNonblankString (configInfo.getSqlInitFile (), "sqlInitFile");
             dataSource = new EmbeddedDatabaseBuilder ().setName ("testdb").addScript (sqlInitFile).build ();
-            hibernateDialect = HSQLDialect.class.getName ();
         } break;
 
         case POSTGRES: {
             dataSource = newComboPooledDataSource (configInfo);
-            hibernateDialect = PostgreSQLDialect.class.getName ();
         } break;
 
         default: {
@@ -80,16 +76,7 @@ public final class JndiDataSourceSupply {
     }
 
     public String getHibernateDialect () {
-        return hibernateDialect;
-    }
-
-    private static DatabaseId getDatabaseId (String idAsString) {
-        validateNonblankString (idAsString, "databaseId");
-        try {
-            return Enum.valueOf (DatabaseId.class, idAsString);
-        } catch (Exception x) {
-            throw new IllegalArgumentException ("Unknown database-id: ".concat (idAsString));
-        }
+        return databaseId.getHibernateDialect ();
     }
 
     private static DataSource newComboPooledDataSource (DatabaseConfigInfo configInfo) {
